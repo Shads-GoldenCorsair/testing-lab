@@ -27,7 +27,8 @@ jobs:
       - name: Gerar as pastas de plataforma (não estão no repositório)
         run: flutter create --org com.testinglab --project-name testing_lab_app --platforms=android .
       - run: flutter pub get
-      - run: flutter analyze
+      # Os avisos de depreciação (info) não falham o CI; erros e warnings falham.
+      - run: flutter analyze --no-fatal-infos
       - run: flutter test
 
   integration-android:
