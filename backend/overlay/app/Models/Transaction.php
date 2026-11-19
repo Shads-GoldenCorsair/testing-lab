@@ -10,6 +10,6 @@ class Transaction extends Model
 
     protected function casts(): array
     {
-        return ['amount' => 'decimal:2'];
+        return ['amount' => 'float'];
     }
 }
