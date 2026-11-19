@@ -1,0 +1,22 @@
+# Fluxo Maestro: login e transferência na app instalada (Android ou iOS).
+# Corre: maestro test .maestro/login_and_transfer.yaml
+appId: com.testinglab.testing_lab_app
+---
+- launchApp:
+    clearState: true
+- tapOn: "Utilizador"
+- inputText: "demo"
+- tapOn: "Palavra-passe"
+- inputText: "demo123"
+- hideKeyboard
+- tapOn: "Entrar"
+- assertVisible: "A minha carteira"
+- assertVisible: "Saldo: 5000.00 MZN"
+- tapOn: "Destinatário"
+- inputText: "Ana Macuácua"
+- tapOn: "Valor (MZN)"
+- inputText: "750"
+- hideKeyboard
+- tapOn: "Enviar"
+- assertVisible: "Transferência concluída"
+- assertVisible: "Saldo: 4250.00 MZN"

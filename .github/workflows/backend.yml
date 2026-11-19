@@ -1,0 +1,49 @@
+name: backend (Laravel + Pest + k6)
+
+on:
+  push:
+    paths: ["backend/**", ".github/workflows/backend.yml"]
+  pull_request:
+    paths: ["backend/**", ".github/workflows/backend.yml"]
+  workflow_dispatch:
+
+jobs:
+  pest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          tools: composer
+          coverage: none
+      - name: Gerar a app Laravel e aplicar o overlay
+        run: ./backend/setup.sh
+      - name: Testes Pest
+        working-directory: backend/app
+        run: ./vendor/bin/pest
+
+  k6:
+    runs-on: ubuntu-latest
+    needs: pest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+          tools: composer
+          coverage: none
+      - run: ./backend/setup.sh
+      - name: Arrancar a API
+        working-directory: backend/app
+        env:
+          PHP_CLI_SERVER_WORKERS: "4"
+        run: |
+          nohup php artisan serve --host=127.0.0.1 --port=8000 > ../serve.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -s -o /dev/null http://127.0.0.1:8000/up && break
+            sleep 1
+          done
+      - uses: grafana/setup-k6-action@v1
+      - name: Teste de carga k6
+        run: k6 run backend/k6/smoke-load.js

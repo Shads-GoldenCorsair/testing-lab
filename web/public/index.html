@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Carteira Demo</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main>
+    <h1>Carteira Demo</h1>
+
+    <section id="login-view">
+      <h2>Entrar</h2>
+      <form id="login-form">
+        <label for="username">Utilizador</label>
+        <input id="username" name="username" autocomplete="username" />
+        <label for="password">Palavra-passe</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" />
+        <button type="submit">Entrar</button>
+        <p id="login-error" role="alert" hidden></p>
+      </form>
+    </section>
+
+    <section id="wallet-view" hidden>
+      <h2>A minha carteira</h2>
+      <p>Saldo: <strong id="balance" data-testid="balance"></strong></p>
+
+      <form id="transfer-form">
+        <h3>Enviar dinheiro</h3>
+        <label for="to">Destinatário</label>
+        <input id="to" name="to" />
+        <label for="amount">Valor (MZN)</label>
+        <input id="amount" name="amount" inputmode="decimal" />
+        <button type="submit">Enviar</button>
+        <p id="transfer-message" role="status"></p>
+      </form>
+
+      <h3>Transacções</h3>
+      <ul id="transactions" aria-label="Transacções"></ul>
+      <button id="logout" type="button">Sair</button>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

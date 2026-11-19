@@ -1,0 +1,8 @@
+body { font-family: system-ui, sans-serif; margin: 0; background: #f6f7f9; color: #1c1f24; }
+main { max-width: 440px; margin: 2rem auto; padding: 0 1rem; }
+form { display: grid; gap: .5rem; background: #fff; padding: 1rem; border-radius: 12px; margin-bottom: 1rem; }
+input { padding: .6rem; border: 1px solid #c5cad3; border-radius: 8px; font-size: 1rem; }
+button { padding: .7rem; border: 0; border-radius: 999px; background: #1f6feb; color: #fff; font-size: 1rem; cursor: pointer; }
+#login-error { color: #b42318; margin: 0; }
+#transfer-message { margin: 0; min-height: 1.2em; }
+ul { padding-left: 1.2rem; }

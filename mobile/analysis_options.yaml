@@ -1,0 +1,4 @@
+analyzer:
+  errors:
+    # O lab não depende de flutter_lints para ficar sem dependências externas.
+    todo: ignore
