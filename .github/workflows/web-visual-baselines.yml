@@ -1,0 +1,35 @@
+name: web (actualizar linhas de base visuais)
+
+# Corre à mão. Gera as capturas de referência no mesmo ambiente do CI
+# (as capturas dependem do sistema e do browser) e faz commit delas.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  baselines:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test tests/visual.spec.ts --project=chromium --update-snapshots
+      - name: Commit das linhas de base
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tests/visual.spec.ts-snapshots
+          git diff --cached --quiet && { echo "Sem alterações"; exit 0; }
+          git commit -m "web: actualizar linhas de base visuais (CI)"
+          git pull --rebase origin ${{ github.ref_name }}
+          git push origin HEAD:${{ github.ref_name }}
