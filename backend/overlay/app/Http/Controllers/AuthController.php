@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    /**
+     * Autentica e devolve um token Bearer.
+     *
+     * @unauthenticated
+     */
     public function login(Request $request): JsonResponse
     {
         $data = $request->validate([

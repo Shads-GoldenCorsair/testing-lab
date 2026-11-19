@@ -21,6 +21,9 @@ composer config --no-plugins allow-plugins.pestphp/pest-plugin true
 composer require pestphp/pest pestphp/pest-plugin-laravel --dev --with-all-dependencies --no-interaction
 # (o Pest 4 não tem pest:install: o tests/Pest.php vem do overlay)
 
+# Contrato OpenAPI gerado do código (Scramble)
+composer require dedoc/scramble --no-interaction
+
 # Ficheiros do laboratório por cima do esqueleto
 cp -R ../overlay/. .
 rm -f tests/Feature/ExampleTest.php tests/Unit/ExampleTest.php
