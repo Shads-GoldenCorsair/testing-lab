@@ -1,0 +1,319 @@
+{
+  "components": {
+    "responses": {
+      "AuthenticationException": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "message": {
+                  "description": "Error overview.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "message"
+              ],
+              "type": "object"
+            }
+          }
+        },
+        "description": "Unauthenticated"
+      },
+      "ValidationException": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "errors": {
+                  "additionalProperties": {
+                    "items": {
+                      "type": "string"
+                    },
+                    "type": "array"
+                  },
+                  "description": "A detailed description of each field that failed validation.",
+                  "type": "object"
+                },
+                "message": {
+                  "description": "Errors overview.",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "message",
+                "errors"
+              ],
+              "type": "object"
+            }
+          }
+        },
+        "description": "Validation error"
+      }
+    },
+    "schemas": {
+      "Transaction": {
+        "properties": {
+          "amount": {
+            "type": "number"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "id": {
+            "type": "integer"
+          },
+          "to": {
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "user_id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "user_id",
+          "to",
+          "amount",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "Transaction",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "http": {
+        "scheme": "bearer",
+        "type": "http"
+      }
+    }
+  },
+  "info": {
+    "title": "Laravel",
+    "version": "0.0.1"
+  },
+  "openapi": "3.1.2",
+  "paths": {
+    "/login": {
+      "post": {
+        "operationId": "auth.login",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "email": {
+                    "format": "email",
+                    "maxLength": 255,
+                    "type": "string"
+                  },
+                  "password": {
+                    "maxLength": 255,
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "token"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "message": {
+                      "const": "Credenciais inválidas",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          }
+        },
+        "security": [],
+        "summary": "Autentica e devolve um token Bearer",
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/transactions": {
+      "get": {
+        "operationId": "wallet.transactions",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Transaction"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          }
+        },
+        "tags": [
+          "Wallet"
+        ]
+      }
+    },
+    "/transfer": {
+      "post": {
+        "operationId": "wallet.transfer",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "amount": {
+                    "maximum": 1000000000,
+                    "minimum": 0.01,
+                    "type": "number"
+                  },
+                  "to": {
+                    "maxLength": 100,
+                    "minLength": 1,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "to",
+                  "amount"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "balance": {
+                      "type": "number"
+                    },
+                    "transaction": {
+                      "$ref": "#/components/schemas/Transaction"
+                    }
+                  },
+                  "required": [
+                    "balance",
+                    "transaction"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationException"
+          }
+        },
+        "tags": [
+          "Wallet"
+        ]
+      }
+    },
+    "/wallet": {
+      "get": {
+        "operationId": "wallet.wallet",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "balance": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "balance"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": ""
+          },
+          "401": {
+            "$ref": "#/components/responses/AuthenticationException"
+          }
+        },
+        "tags": [
+          "Wallet"
+        ]
+      }
+    }
+  },
+  "security": [
+    {
+      "http": []
+    }
+  ],
+  "servers": [
+    {
+      "url": "http://localhost:8000/api"
+    }
+  ]
+}
