@@ -62,6 +62,15 @@ jobs:
       - name: Exportar o contrato OpenAPI (Scramble)
         working-directory: backend/app
         run: php artisan scramble:export --path=openapi.json
+      - name: Contrato igual ao snapshot commitado (backend/openapi.json)
+        run: |
+          jq -S . backend/app/openapi.json > /tmp/openapi.generated.json
+          if [ ! -f backend/openapi.json ]; then
+            echo "::warning::sem snapshot; a imprimir o contrato gerado"
+            echo "=====OPENAPI-BEGIN====="; cat /tmp/openapi.generated.json; echo "=====OPENAPI-END====="
+            exit 1
+          fi
+          diff -u backend/openapi.json /tmp/openapi.generated.json || { echo "::error::O contrato mudou. Actualiza backend/openapi.json (jq -S . app/openapi.json)"; exit 1; }
       - uses: actions/upload-artifact@v4
         with:
           name: openapi
