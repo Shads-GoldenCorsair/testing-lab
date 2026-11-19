@@ -8,7 +8,7 @@ Laboratório para comparar e experimentar ferramentas de testes automatizados em
 | --- | --- | --- |
 | [`web/`](web) | Playwright (UI, API, mock de rede), agentes de IA do Playwright | Verificado no CI: 22 execuções a passar (11 testes, desktop e telemóvel). Também falha quando se estraga a regra de saldo |
 | [`backend/`](backend) | Laravel + Sanctum, Pest, k6, OpenAPI (Scramble) + Schemathesis | Verificado no CI: 14 testes Pest (+1 de regressão); k6 com 0% de falhas em 281 pedidos e p95 de 12 ms; contrato OpenAPI gerado do código ([`openapi.json`](backend/openapi.json)) e fuzzing Schemathesis a passar (fases examples + fuzzing). O Schemathesis encontrou 5 incoerências reais, todas corrigidas (ver abaixo). A falha do snapshot em caso de deriva está no CI mas ainda não foi provocada de propósito |
-| [`mobile/`](mobile) | Flutter, flutter_test, integration_test, Maestro | Verificado no CI: 5 testes de widget a passar. **Não verificados:** integração em emulador (manual no CI), Maestro e Patrol |
+| [`mobile/`](mobile) | Flutter, flutter_test, integration_test, Maestro | Verificado no CI: 5 testes de widget; integração `integration_test` no emulador Android e no simulador iOS (macOS); fluxo Maestro completo (login + transferência) no emulador Android — os 3 últimos correm à mão (workflow_dispatch com `run_integration`). **Não verificados:** Maestro em iOS e Patrol |
 
 Nota: o `flutter analyze` mostra 6 avisos de depreciação (o Flutter mais recente quer
 `material_ui` no lugar de `flutter/material.dart`). O CI usa `--no-fatal-infos` e a migração
