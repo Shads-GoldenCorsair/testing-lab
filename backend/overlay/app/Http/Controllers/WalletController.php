@@ -17,7 +17,7 @@ class WalletController extends Controller
     public function transactions(Request $request): JsonResponse
     {
         return response()->json(
-            $request->user()->transactions()->latest('id')->get(['id', 'user_id', 'to', 'amount', 'created_at'])
+            $request->user()->transactions()->latest('id')->get()
         );
     }
 
