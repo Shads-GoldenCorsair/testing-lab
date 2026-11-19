@@ -26,3 +26,9 @@ it('valida o formato do pedido com 422', function () {
         ->assertUnprocessable()
         ->assertJsonValidationErrors(['email', 'password']);
 });
+
+it('devolve 401 JSON em /api/* mesmo sem cabeçalho Accept', function () {
+    $this->call('GET', '/api/wallet')
+        ->assertStatus(401)
+        ->assertJson(['message' => 'Unauthenticated.']);
+});

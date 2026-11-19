@@ -25,7 +25,7 @@ class WalletController extends Controller
     {
         $data = $request->validate([
             'to' => ['required', 'string', 'min:1', 'max:100'],
-            'amount' => ['required', 'numeric', 'gt:0', 'max:1000000000'],
+            'amount' => ['required', 'numeric', 'min:0.01', 'max:1000000000'],
         ]);
 
         return DB::transaction(function () use ($request, $data) {
