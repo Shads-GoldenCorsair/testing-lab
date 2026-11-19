@@ -19,7 +19,7 @@ php artisan install:api --no-interaction
 # Pest
 composer config --no-plugins allow-plugins.pestphp/pest-plugin true
 composer require pestphp/pest pestphp/pest-plugin-laravel --dev --with-all-dependencies --no-interaction
-php artisan pest:install --no-interaction
+# (o Pest 4 não tem pest:install: o tests/Pest.php vem do overlay)
 
 # Ficheiros do laboratório por cima do esqueleto
 cp -R ../overlay/. .
