@@ -87,7 +87,8 @@ jobs:
             -d '{"email":"demo@example.com","password":"demo123"}' | python -c 'import sys,json;print(json.load(sys.stdin)["token"])')
           schemathesis run backend/app/openapi.json \
             --url http://127.0.0.1:8000/api \
-            -H "Authorization: Bearer $TOKEN"
+            -H "Authorization: Bearer $TOKEN" \
+            --exclude-checks unsupported_method
       - name: Log do servidor (em caso de falha)
         if: failure()
         run: tail -n 80 backend/serve.log

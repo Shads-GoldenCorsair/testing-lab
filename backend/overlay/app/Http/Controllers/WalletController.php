@@ -24,8 +24,8 @@ class WalletController extends Controller
     public function transfer(Request $request): JsonResponse
     {
         $data = $request->validate([
-            'to' => ['required', 'string', 'max:100'],
-            'amount' => ['required', 'numeric', 'gt:0'],
+            'to' => ['required', 'string', 'min:1', 'max:100'],
+            'amount' => ['required', 'numeric', 'gt:0', 'max:1000000000'],
         ]);
 
         return DB::transaction(function () use ($request, $data) {
