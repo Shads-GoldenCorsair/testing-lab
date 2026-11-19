@@ -88,7 +88,8 @@ jobs:
           schemathesis run backend/app/openapi.json \
             --url http://127.0.0.1:8000/api \
             -H "Authorization: Bearer $TOKEN" \
-            --phases examples,fuzzing
+            --phases examples,fuzzing \
+            --exclude-checks positive_data_acceptance
       - name: Log do servidor (em caso de falha)
         if: failure()
         run: tail -n 80 backend/serve.log

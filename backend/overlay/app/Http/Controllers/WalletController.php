@@ -17,7 +17,7 @@ class WalletController extends Controller
     public function transactions(Request $request): JsonResponse
     {
         return response()->json(
-            $request->user()->transactions()->latest('id')->get(['id', 'to', 'amount', 'created_at'])
+            $request->user()->transactions()->latest('id')->get(['id', 'user_id', 'to', 'amount', 'created_at'])
         );
     }
 
@@ -32,7 +32,10 @@ class WalletController extends Controller
             $user = User::whereKey($request->user()->id)->lockForUpdate()->first();
 
             if ((float) $data['amount'] > (float) $user->balance) {
-                return response()->json(['message' => 'Saldo insuficiente'], 422);
+                return response()->json([
+                    'message' => 'Saldo insuficiente',
+                    'errors' => ['amount' => ['Saldo insuficiente']],
+                ], 422);
             }
 
             $user->decrement('balance', $data['amount']);
